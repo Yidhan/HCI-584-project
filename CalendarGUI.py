@@ -7,6 +7,18 @@ and request booking. """
 # Author:     Yiding Han
 # Created:    6/12/2020
 # TODO:       Add functions
-# Note:
+# Note:       Use PyQT to develop GUI later
 # -----------------------------------------------------------------------------------------------------------------------
 
+#use PyQT to create GUI
+
+class CalendarGUI(object):
+
+
+    def __init__(self):
+        pass
+
+
+
+if  __name__ == "__main__":
+    CalendarGUI()
