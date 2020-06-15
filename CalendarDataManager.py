@@ -19,7 +19,7 @@ class CalendarDataManager(object):
     def get_all_data(self):
         pass
 
-    def get_data_on_date(self,date_time):
+    def get_data_of_date_range(self,date_time):
         pass
-    def check_availabity(self,specific_time):
+    def check_time_on_date(self,specific_time):
         pass
