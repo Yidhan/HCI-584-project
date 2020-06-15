@@ -11,8 +11,10 @@
 
 class EventHandler(object):
 
+    #when update button is clicked
     def update_button_cliked(self):
+        #call get_calendar_data function in EventHandler class
         pass
-
+    #when any timeslot button is clicked
     def timeslot_button_clicked(self):
         pass
