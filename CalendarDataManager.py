@@ -14,10 +14,12 @@ from datetime import datetime,timedelta, timezone
 class CalendarDataManager(object):
 
     event_list = [] #class attribute
-    #get data from google calendar
-    def get_calendar_data(url):
-        pass
-    #parse data to gui, each timeslot(list memeber) as a button
-    def parse_to_gui(event_list):
+
+    #get all calendar data from google calendar
+    def get_all_data(self):
         pass
 
+    def get_data_on_date(self,date_time):
+        pass
+    def check_availabity(self,specific_time):
+        pass
