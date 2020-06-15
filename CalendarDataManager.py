@@ -17,7 +17,7 @@ class CalendarDataManager(object):
     #get data from google calendar
     def get_calendar_data(url):
         pass
-    #parse data to gui, each timeslot(list memeber) as buttons
+    #parse data to gui, each timeslot(list memeber) as a button
     def parse_to_gui(event_list):
         pass
 
