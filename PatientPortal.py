@@ -6,7 +6,15 @@
 # Author:     Yiding Han
 # Created:    6/12/2020
 # TODO:       Add functions
-# Note:
+# Note:       wrapper class,bind UI control with eventhandler functions
 # -----------------------------------------------------------------------------------------------------------------------
 
+class PatientPortal(object):
 
+    #initialize objects
+    def parse_data_to_gui(self):
+        pass
+
+    def get_data_from_gui(self):
+        pass
+    # get user selected data
