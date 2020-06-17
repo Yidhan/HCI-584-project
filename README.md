@@ -9,12 +9,13 @@ Doctor’s office staff and Patients
 Designing an appointment booking system for doctor’s offices and patients. Patients can check out available date and time on the app, and request a booking/removal/change through Google calendar API as invitations. The staff in the doctor's office will review the booking requests via google calendar and then perform the booking by accept or decline the invitation on Google calendar.  
 
 ###Workflow and User interaction:
-- Set a range of dates and blocks of time (on weekdays, 1 hour blocks 9am to 5pm).
-- Share the dates and time blocks with patients via app (patient portal). 
-- Both patients and the doctor's office can see what's already booked.
-- Patients can request a booking (or removal or change), and the doctor’s office gets notified and performs the actual booking.
+- Admin sets a range of dates and blocks of time (on weekdays, 1 hour blocks 9am to 5pm) on their google calendar account
+- App reads the data from google calendar (patient portal)--patients can click on a date and see the availablity printed out. 
+- Both patients and the doctor's office can see what's available or booked.
+- Admin can perform changes and cancellations on google calendar
+- Patients can book directly on the app.
+- When patients click "book" on the app, the time slot selected gets booked automatically(statues changed to "book" or simply disappeared on calendar)
 - Refresh the calendar data on patient portal by click "Refresh" or every certain time
-- Customers get email confirmation when their booking is confirmed by the staff via Google calendar.
 - Possible external mechanisms to be used:
     Google Calendar API
 
