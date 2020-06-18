@@ -15,7 +15,7 @@ from EventHandler import EventHandler
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QPushButton, QCalendarWidget
+from PySide2.QtWidgets import QApplication, QPushButton, QCalendarWidget,QListWidget
 
 
 class CalendarApp(QMainWindow):
@@ -32,6 +32,11 @@ class CalendarApp(QMainWindow):
         btn.clicked.connect(self.eventHandler.bookPushButton_cliked)
 
         self.calWidget = self.window.findChild(QCalendarWidget, 'calendarWidget')
+        self.calWidget.selectedDate().connect(self.eventHandler.clickOnDate)
+
+        self.QListWidget = self.window.findchild(QListWidget, 'listWidget')
+        self.QListWidget.connect(self.eventHandler.clickOnDate)
+
 
     def load_ui(self):
         loader = QUiLoader()
