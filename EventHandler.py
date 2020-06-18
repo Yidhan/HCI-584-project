@@ -63,10 +63,12 @@ class EventHandler(object):
             timeMax=end_of_day, maxResults=100, singleEvents=True,
             orderBy='startTime').execute()
         events = events_result.get('items', [])
-
+        events_list=[]
         if not events:
             print('No availability found.')
         for event in events:
             start = event['start'].get('dateTime')
-            print(start, event['summary'])
-
+            s = start + event['summary']
+            events_list.append(s)
+            print(s)
+        return events_list
