@@ -11,10 +11,11 @@
 
 class EventHandler(object):
 
-    #when update button is clicked
-    def update_button_cliked(self):
-        #call get_calendar_data function in EventHandler class
-        pass
-    #when any timeslot button is clicked
-    def timeslot_button_clicked(self):
-        pass
+    #when book button is clicked
+    def bookPushButton_cliked(self):
+        print("You are booked!")
+
+
+    #when book button is clicked
+    def refreshPushButton_clicked(self):
+        print("Page is refreshed")
