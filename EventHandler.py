@@ -19,7 +19,10 @@ from google.auth.transport.requests import Request
 
 class EventHandler(object):
 
-    def __init__(self):
+    def __init__(self, calUI):
+        self.calUI = calUI
+        pass
+
         # If modifying these scopes, delete the file token.pickle.
         SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
@@ -51,24 +54,54 @@ class EventHandler(object):
 
     #when book button is clicked
     def refreshPushButton_clicked(self):
+        #self.clickOnDate() for testing
         print("Page is refreshed")
 
 
+    #This function is called when any date on the GUI calendar is clicked
+    #it will record the date that is selected,
+    #and pull calendar data from Google calendar account using Dr's calendarID and credentials,
+    #then print out and return the events list(availablity)
     def clickOnDate(self):
-        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        end_of_day = (datetime.datetime.utcnow() + datetime.timedelta(hours=24)).isoformat() + 'Z'
-        print('Availabilities for the next 24 hours')
+        events_list = []
+        selected_date = self.calUI.calWidget.selectedDate()
+
+        now_time = datetime.datetime.now()
+        # if selected_date is today, show events from now to 11:59pm today
+        if (now_time.year == selected_date.year() and now_time.month == selected_date.month()
+                and now_time.day == selected_date.day()):
+            start_time = now_time
+        # else, show events from 0:00am to 11:59pm today
+        elif (selected_date.year() >= now_time.year and selected_date.month() >= now_time.month
+              and selected_date.day() > now_time.day):
+            start_time = datetime.datetime(selected_date.year() , selected_date.month(), selected_date.day(), 0, 0, 0)
+        else:
+            # Selected a previous date, print error message, reset list
+            print("Invalid date, please try again!")
+            return events_list
+        #no matter what, end_time is 23:59:59 of selected_date
+        end_time = datetime.datetime(selected_date.year(), selected_date.month(), selected_date.day(), 23, 59, 59)
+
+        #print out title for the results
+        print('Availabilities for', selected_date.month(), '/', selected_date.day(), '/', selected_date.year())
+
+        #call service.events().list to set up calendar ID and start and end time
         events_result = self.service.events().list(
-            calendarId='iastate.edu_0s2c32mjtkthhlefe3le63lgms@group.calendar.google.com', timeMin=now,
-            timeMax=end_of_day, maxResults=100, singleEvents=True,
+            calendarId='iastate.edu_0s2c32mjtkthhlefe3le63lgms@group.calendar.google.com',
+            timeMin=start_time.isoformat() + "Z",
+            timeMax=end_time.isoformat() + "Z", maxResults=10, singleEvents=True,
             orderBy='startTime').execute()
+        #store all valid events in a list
         events = events_result.get('items', [])
-        events_list=[]
+
+        #check if events list is empty, print No availability found if is empty.
         if not events:
             print('No availability found.')
+        #if events list is not empty, for every event in the list, get its'dateTime' and 'summary' in the dictionary list
         for event in events:
             start = event['start'].get('dateTime')
-            s = start + event['summary']
+            s = start +' '+ event['summary']
+            #append all results to events_list and print it
             events_list.append(s)
             print(s)
         return events_list
