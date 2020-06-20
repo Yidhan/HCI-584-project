@@ -21,3 +21,7 @@ Designing an appointment booking system for doctor’s offices and patients. Pat
 
 ### GUI:
 Desktop app, only for patient. Doctor’s office portal is on their google account.
+
+### Data Flow
+CalendarGUI----(bind with)-----> EventHandler----(get data from and updates)--->Dr.Google calendar account
+CalendarData(optional)---format data???
