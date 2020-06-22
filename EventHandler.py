@@ -6,7 +6,7 @@
 # Author:     Yiding Han
 # Created:    6/12/2020
 # TODO:       Add function body
-# Note:
+# Note:       Handles GUI events and interacts with google calendar API directly
 # -----------------------------------------------------------------------------------------------------------------------
 from __future__ import print_function
 import datetime
@@ -15,7 +15,8 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-
+from dateutil import tz
+from PySide2.QtWidgets import QDialog
 
 class EventHandler(object):
 
@@ -49,12 +50,12 @@ class EventHandler(object):
 
     #when book button is clicked
     def bookPushButton_cliked(self):
-        print("You are booked!")
+        self.calUI.CreateInfoDialog()
 
 
     #when book button is clicked
+    #need to fill in the body
     def refreshPushButton_clicked(self):
-        #self.clickOnDate() for testing
         print("Page is refreshed")
 
 
@@ -63,6 +64,7 @@ class EventHandler(object):
     #and pull calendar data from Google calendar account using Dr's calendarID and credentials,
     #then print out and return the events list(availablity)
     def clickOnDate(self):
+        self.calUI.QListWidget.clear()
         events_list = []
         selected_date = self.calUI.calWidget.selectedDate()
 
@@ -74,7 +76,7 @@ class EventHandler(object):
         # else, show events from 0:00am to 11:59pm today
         elif (selected_date.year() >= now_time.year and selected_date.month() >= now_time.month
               and selected_date.day() > now_time.day):
-            start_time = datetime.datetime(selected_date.year() , selected_date.month(), selected_date.day(), 0, 0, 0)
+            start_time = datetime.datetime(selected_date.year() , selected_date.month(), selected_date.day(), 0, 0, 1)
         else:
             # Selected a previous date, print error message, reset list
             print("Invalid date, please try again!")
@@ -85,12 +87,16 @@ class EventHandler(object):
         #print out title for the results
         print('Availabilities for', selected_date.month(), '/', selected_date.day(), '/', selected_date.year())
 
+        tzinfo = tz.gettz('America/Los_Angeles')
+        start_time = start_time.astimezone(tzinfo)
+        end_time = end_time.astimezone(tzinfo)
+
         #call service.events().list to set up calendar ID and start and end time
         events_result = self.service.events().list(
             calendarId='iastate.edu_0s2c32mjtkthhlefe3le63lgms@group.calendar.google.com',
-            timeMin=start_time.isoformat() + "Z",
-            timeMax=end_time.isoformat() + "Z", maxResults=10, singleEvents=True,
-            orderBy='startTime').execute()
+            timeMin=start_time.isoformat(), timeMax=end_time.isoformat(),
+            maxResults=10, singleEvents=True, orderBy='startTime').execute()
+
         #store all valid events in a list
         events = events_result.get('items', [])
 
@@ -104,4 +110,5 @@ class EventHandler(object):
             #append all results to events_list and print it
             events_list.append(s)
             print(s)
+            self.calUI.QListWidget.addItem(s)
         return events_list
