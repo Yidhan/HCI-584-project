@@ -6,6 +6,8 @@ Bug sheet
 Bug 1 fixed.
 
 6/21
-2. To fix: close The pop-up infoWindow will automatically exit the running program, which is not expected
-3. To fix: close the main window will not close the infoWindow
+2. close The pop-up infoWindow will automatically exit the running program, which is not expected
+3. close the main window will not close the infoWindow,and the program still runs
+4. when the pop-up info window shows up, I can still use the main window to look up dates, when it shouldn’t, the pop-up window should have the priority, and the main window should be blocked at this time.
+
 
