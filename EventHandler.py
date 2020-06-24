@@ -79,13 +79,15 @@ class EventHandler(object):
             start_time = datetime.datetime(selected_date.year() , selected_date.month(), selected_date.day(), 0, 0, 1)
         else:
             # Selected a previous date, print error message, reset list
+            self.calUI.QListWidget.addItem("Invalid date, please try again!")
             print("Invalid date, please try again!")
             return events_list
         #no matter what, end_time is 23:59:59 of selected_date
         end_time = datetime.datetime(selected_date.year(), selected_date.month(), selected_date.day(), 23, 59, 59)
 
         #print out title for the results
-        print('Availabilities for', selected_date.month(), '/', selected_date.day(), '/', selected_date.year())
+        title = "Availabilities for "+ str(selected_date.month())+ "/"+ str(selected_date.day())+ "/"+ str(selected_date.year())
+        print(title)
 
         tzinfo = tz.gettz('America/Los_Angeles')
         start_time = start_time.astimezone(tzinfo)
@@ -102,8 +104,11 @@ class EventHandler(object):
 
         #check if events list is empty, print No availability found if is empty.
         if not events:
+            self.calUI.QListWidget.addItem('No availability found.')
             print('No availability found.')
+            return
         #if events list is not empty, for every event in the list, get its'dateTime' and 'summary' in the dictionary list
+        self.calUI.QListWidget.addItem(title)
         for event in events:
             start = event['start'].get('dateTime')
             s = start +' '+ event['summary']
