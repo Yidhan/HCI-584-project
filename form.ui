@@ -66,19 +66,31 @@
       <x>550</x>
       <y>90</y>
       <width>151</width>
-      <height>251</height>
+      <height>441</height>
      </rect>
     </property>
     <property name="plainText">
-     <string>Step 1: Find a date
+     <string>Step 1: 
+Find a date
 
-Step 2: Click on the date to see the availablities
 
-Step 3: Click on the desired time slot
+Step 2: 
+Click on the date to see the availablities
 
-Step 4: Fill in name, email address, and reason for visit in poped out form
 
-Step 5: Click on &quot;Book&quot;</string>
+Step 3: 
+Click on the desired time slot
+
+
+Step 4: 
+Fill in name, email address, and reason for visit in poped out form
+
+
+Step 5: 
+Click on &quot;Book&quot;
+
+
+All set!</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
