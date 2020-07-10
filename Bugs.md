@@ -10,4 +10,5 @@ Bug 1 fixed.
 3. close the main window will not close the infoWindow,and the program still runs
 4. when the pop-up info window shows up, I can still use the main window to look up dates, when it shouldn’t, the pop-up window should have the priority, and the main window should be blocked at this time.
 
+Bugs 2,3,4 fixed by adding feautures to the popup window(made it frameless and stay on top), hide when send button is clicked.git 
 
