@@ -50,7 +50,7 @@ class EventHandler(object):
 
     #when book button is clicked
     def bookPushButton_cliked(self):
-        self.calUI.CreateInfoDialog()
+        self.calUI.showInfoDialog()
 
 
     #when book button is clicked
@@ -58,7 +58,15 @@ class EventHandler(object):
     def refreshPushButton_clicked(self):
         print("Page is refreshed")
 
+    def sendPushButton_clicked(self):
+        self.calUI.setEnabled(True)
+        self.calUI.infoDialog.hide()
+        pass
 
+    def cancelPushButton_clicked(self):
+        self.calUI.infoDialog.hide()
+        self.calUI.setEnabled(True)
+        pass
     #This function is called when any date on the GUI calendar is clicked
     #it will record the date that is selected,
     #and pull calendar data from Google calendar account using Dr's calendarID and credentials,

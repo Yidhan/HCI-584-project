@@ -15,7 +15,7 @@ from EventHandler import EventHandler
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtCore import QFile, Qt
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget
+from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit, QTextEdit
 
 class InfoWindow(QDialog):
     def __init__(self):
@@ -29,15 +29,18 @@ class InfoWindow(QDialog):
         ui_file.open(QFile.ReadOnly)
         loader.load(ui_file, self)
         ui_file.close()
+        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setWindowFlags(self.windowFlags()^Qt.WindowStaysOnTopHint)
 
 class CalendarApp(QMainWindow):
     def __init__(self):
         self.eventHandler = EventHandler(self)
         super(CalendarApp, self).__init__()
+        self.infoDialog = InfoWindow()
         self.load_ui()
 
-    def CreateInfoDialog(self):
-        self.infoDialog = InfoWindow()
+    def showInfoDialog(self):
+        self.setEnabled(False)
         self.infoDialog.show()
 
     def BindEventsHandler(self):
@@ -50,6 +53,10 @@ class CalendarApp(QMainWindow):
         self.calWidget = self.window.findChild(QCalendarWidget, 'calendarWidget')
         self.calWidget.selectionChanged.connect(self.eventHandler.clickOnDate)
         self.QListWidget = self.window.findChild(QListWidget, 'listWidget')
+
+        btn = self.infoDialog.findChild(QPushButton, "sendButton")
+        btn.clicked.connect(self.eventHandler.sendPushButton_clicked)
+
 
     def load_ui(self):
         loader = QUiLoader()
