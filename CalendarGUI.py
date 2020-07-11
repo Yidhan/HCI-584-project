@@ -29,7 +29,9 @@ class InfoWindow(QDialog):
         ui_file.open(QFile.ReadOnly)
         loader.load(ui_file, self)
         ui_file.close()
+        #set popup window to be frameless, so users don't accidentally click on close
         self.setWindowFlag(Qt.FramelessWindowHint)
+        #set popup window to stay on top of the main window when it is showing
         self.setWindowFlags(self.windowFlags()^Qt.WindowStaysOnTopHint)
 
 class CalendarApp(QMainWindow):
@@ -39,10 +41,14 @@ class CalendarApp(QMainWindow):
         self.infoDialog = InfoWindow()
         self.load_ui()
 
+    #call when bookPushbotton is clicked
     def showInfoDialog(self):
+        #set main window to disable when showing the popup window
         self.setEnabled(False)
+        # show popup info window
         self.infoDialog.show()
 
+    #Bindind the UI components to listener(eventhandler)
     def BindEventsHandler(self):
         btn = self.window.findChild(QPushButton, 'refreshPushButton')
         btn.clicked.connect(self.eventHandler.refreshPushButton_clicked)
@@ -54,8 +60,11 @@ class CalendarApp(QMainWindow):
         self.calWidget.selectionChanged.connect(self.eventHandler.clickOnDate)
         self.QListWidget = self.window.findChild(QListWidget, 'listWidget')
 
-        btn = self.infoDialog.findChild(QPushButton, "sendButton")
+        btn = self.infoDialog.findChild(QPushButton, 'sendButton')
         btn.clicked.connect(self.eventHandler.sendPushButton_clicked)
+
+        btn = self.infoDialog.findChild(QPushButton, 'cancelButton')
+        btn.clicked.connect(self.eventHandler.cancelPushButton_clicked)
 
 
     def load_ui(self):

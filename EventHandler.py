@@ -16,7 +16,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from dateutil import tz
-from PySide2.QtWidgets import QDialog
+from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit
 
 class EventHandler(object):
 
@@ -58,15 +58,21 @@ class EventHandler(object):
     def refreshPushButton_clicked(self):
         print("Page is refreshed")
 
+    user_info = ''
+
     def sendPushButton_clicked(self):
+        #enable main window
         self.calUI.setEnabled(True)
+        #hide popup window
         self.calUI.infoDialog.hide()
-        pass
+        self.user_info = self.getUserInfo()
 
     def cancelPushButton_clicked(self):
+        #hide popup window
         self.calUI.infoDialog.hide()
+        #enable main window
         self.calUI.setEnabled(True)
-        pass
+
     #This function is called when any date on the GUI calendar is clicked
     #it will record the date that is selected,
     #and pull calendar data from Google calendar account using Dr's calendarID and credentials,
@@ -122,6 +128,21 @@ class EventHandler(object):
             s = start +' '+ event['summary']
             #append all results to events_list and print it
             events_list.append(s)
-            print(s)
+            #print(s)
             self.calUI.QListWidget.addItem(s)
         return events_list
+
+
+    def getUserInfo(self):
+        user_info = ''
+        user_selection = self.calUI.QListWidget
+        array1= user_selection.selectedItems()
+        user_info += array1[0].text()
+        user_name = self.calUI.infoDialog.findChild(QPlainTextEdit, 'nameTextEdit')
+        user_info = user_info + '\n' + user_name.toPlainText()
+        user_email = self.calUI.infoDialog.findChild(QPlainTextEdit, 'emailTextEdit')
+        user_info = user_info + '\n' + user_email.toPlainText()
+        user_reason = self.calUI.infoDialog.findChild(QPlainTextEdit, 'reasonTextEdit')
+        user_info = user_info + '\n' + user_reason.toPlainText()
+        print(user_info)
+        return user_info
