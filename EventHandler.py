@@ -18,11 +18,25 @@ from google.auth.transport.requests import Request
 from dateutil import tz
 from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit
 
+from apiclient import errors
+import base64
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import mimetypes
+
+
+
 class EventHandler(object):
 
     def __init__(self, calUI):
         self.calUI = calUI
-        pass
+        self.user_info = ''
+        self.user_name = ''
+        self.user_email = ''
+        self.user_selection = ''
 
         # If modifying these scopes, delete the file token.pickle.
         SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
@@ -31,8 +45,8 @@ class EventHandler(object):
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
+        if os.path.exists('tokenCal.pickle'):
+            with open('tokenCal.pickle', 'rb') as token:
                 creds = pickle.load(token)
             # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
@@ -43,7 +57,7 @@ class EventHandler(object):
                     'credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
                 # Save the credentials for the next run
-            with open('token.pickle', 'wb') as token:
+            with open('tokenCal.pickle', 'wb') as token:
                 pickle.dump(creds, token)
 
         self.service = build('calendar', 'v3', credentials=creds)
@@ -58,14 +72,15 @@ class EventHandler(object):
     def refreshPushButton_clicked(self):
         print("Page is refreshed")
 
-    user_info = ''
-
     def sendPushButton_clicked(self):
         #enable main window
         self.calUI.setEnabled(True)
         #hide popup window
         self.calUI.infoDialog.hide()
-        self.user_info = self.getUserInfo()
+        self.getUserInfo()
+        message = self.CreateMessage(self.user_email, 'yidingh@iastate.edu', self.user_name, self.user_info)
+        #self.SendMessage(self.gmail_service_ID(),self.user_email,message)
+
 
     def cancelPushButton_clicked(self):
         #hide popup window
@@ -134,15 +149,65 @@ class EventHandler(object):
 
 
     def getUserInfo(self):
-        user_info = ''
-        user_selection = self.calUI.QListWidget
-        array1= user_selection.selectedItems()
-        user_info += array1[0].text()
-        user_name = self.calUI.infoDialog.findChild(QPlainTextEdit, 'nameTextEdit')
-        user_info = user_info + '\n' + user_name.toPlainText()
-        user_email = self.calUI.infoDialog.findChild(QPlainTextEdit, 'emailTextEdit')
-        user_info = user_info + '\n' + user_email.toPlainText()
-        user_reason = self.calUI.infoDialog.findChild(QPlainTextEdit, 'reasonTextEdit')
-        user_info = user_info + '\n' + user_reason.toPlainText()
-        print(user_info)
-        return user_info
+        select_widget = self.calUI.QListWidget
+        array1= select_widget.selectedItems()
+        self.user_info += array1[0].text()
+        self.user_name = self.calUI.infoDialog.findChild(QPlainTextEdit, 'nameTextEdit').toPlainText()
+        self.user_info = self.user_info + '\n' + self.user_name
+        self.user_email = self.calUI.infoDialog.findChild(QPlainTextEdit, 'emailTextEdit').toPlainText()
+        self.user_info = self.user_info + '\n' + self.user_email
+        self.user_reason = self.calUI.infoDialog.findChild(QPlainTextEdit, 'reasonTextEdit').toPlainText()
+        self.user_info = self.user_info + '\n' + self.user_reason
+        print(self.user_info)
+
+
+    def CreateMessage(self, sender, to, subject, message_text):
+        """Create a message for an email.
+
+        Args:
+          sender: Email address of the sender.
+          to: Email address of the receiver.
+          subject: The subject of the email message.
+          message_text: The text of the email message.
+
+        Returns:
+          An object containing a base64url encoded email object.
+        """
+        message = MIMEText(message_text)
+        message['to'] = to
+        message['from'] = sender
+        message['subject'] = subject
+        return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
+
+    def SendMessage(self, service, user_id, message):
+        try:
+            message = service.users().messages().send(userId=user_id, body=message).execute()
+
+            print('Message Id: %s' % message['id'])
+            return message
+        except ValueError:
+            print("An error occurred")
+
+    def gmail_service_ID(self):
+        SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+        creds = None
+        # The file token.pickle stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first
+        # time.
+        if os.path.exists('tokenGmail.pickle'):
+            with open('tokenGmail.pickle', 'rb') as token:
+                creds = pickle.load(token)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'gmailCredential.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('tokenGmail.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+
+        service = build('gmail', 'v1', credentials=creds)
+        return service
