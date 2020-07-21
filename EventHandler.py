@@ -27,7 +27,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import mimetypes
 
-
+import yagmail
+import keyring
 
 class EventHandler(object):
 
@@ -78,9 +79,9 @@ class EventHandler(object):
         #hide popup window
         self.calUI.infoDialog.hide()
         self.getUserInfo()
-        message = self.CreateMessage(self.user_email, 'yidingh@iastate.edu', self.user_name, self.user_info)
+        #message = self.CreateMessage(self.user_email, 'yidingh@iastate.edu', self.user_name, self.user_info)
         #self.SendMessage(self.gmail_service_ID(),self.user_email,message)
-
+        self.sendEmail()
 
     def cancelPushButton_clicked(self):
         #hide popup window
@@ -161,7 +162,15 @@ class EventHandler(object):
         print(self.user_info)
 
 
-    def CreateMessage(self, sender, to, subject, message_text):
+    def sendEmail(self):
+        #yagmail.register('jenny.han1989', 'teddybear1989')
+        #keyring.set_password('yagmail', 'jenny.han1989@gmail.com', 'teddybear1989')
+        yag = yagmail.SMTP('jenny.han1989@gmail.com','teddybear1989')
+        contents = self.user_info
+        yag.send(to='yidingh@iastate.edu', subject='Appointment request', contents=contents)
+
+
+    '''def CreateMessage(self, sender, to, subject, message_text):
         """Create a message for an email.
 
         Args:
@@ -210,4 +219,4 @@ class EventHandler(object):
                 pickle.dump(creds, token)
 
         service = build('gmail', 'v1', credentials=creds)
-        return service
+        return service '''
