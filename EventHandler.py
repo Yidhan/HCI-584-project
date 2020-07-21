@@ -16,7 +16,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from dateutil import tz
-from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit
+from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit, QMessageBox
 
 from apiclient import errors
 import base64
@@ -152,13 +152,13 @@ class EventHandler(object):
     def getUserInfo(self):
         select_widget = self.calUI.QListWidget
         array1= select_widget.selectedItems()
-        self.user_info += array1[0].text()
+        self.user_info += 'Selected time: ' + array1[0].text()
         self.user_name = self.calUI.infoDialog.findChild(QPlainTextEdit, 'nameTextEdit').toPlainText()
-        self.user_info = self.user_info + '\n' + self.user_name
+        self.user_info = self.user_info + '\n' + 'Patient name: ' + self.user_name
         self.user_email = self.calUI.infoDialog.findChild(QPlainTextEdit, 'emailTextEdit').toPlainText()
-        self.user_info = self.user_info + '\n' + self.user_email
+        self.user_info = self.user_info + '\n' + 'Patient email: '+ self.user_email
         self.user_reason = self.calUI.infoDialog.findChild(QPlainTextEdit, 'reasonTextEdit').toPlainText()
-        self.user_info = self.user_info + '\n' + self.user_reason
+        self.user_info = self.user_info + '\n' + 'Reason for visit: ' + self.user_reason
         print(self.user_info)
 
 
@@ -167,57 +167,14 @@ class EventHandler(object):
         #keyring.set_password('yagmail', 'jenny.han1989@gmail.com', 'teddybear1989')
         import yagmail
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
-        yag.send(to='yidingh@iastate.edu', subject='Appointment request', contents=self.user_info)
+        msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
+        msgBox = QMessageBox()
+        if msg == False:
+            msgBox.setText("Failed, please try again.")
+            msgBox.exec_()
+        else:
+            msgBox.setText("Request was sent.")
+            msgBox.exec_()
 
 
 
-    '''def CreateMessage(self, sender, to, subject, message_text):
-        """Create a message for an email.
-
-        Args:
-          sender: Email address of the sender.
-          to: Email address of the receiver.
-          subject: The subject of the email message.
-          message_text: The text of the email message.
-
-        Returns:
-          An object containing a base64url encoded email object.
-        """
-        message = MIMEText(message_text)
-        message['to'] = to
-        message['from'] = sender
-        message['subject'] = subject
-        return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
-
-    def SendMessage(self, service, user_id, message):
-        try:
-            message = service.users().messages().send(userId=user_id, body=message).execute()
-
-            print('Message Id: %s' % message['id'])
-            return message
-        except ValueError:
-            print("An error occurred")
-
-    def gmail_service_ID(self):
-        SCOPES = ['https://www.googleapis.com/auth/gmail.send']
-        creds = None
-        # The file token.pickle stores the user's access and refresh tokens, and is
-        # created automatically when the authorization flow completes for the first
-        # time.
-        if os.path.exists('tokenGmail.pickle'):
-            with open('tokenGmail.pickle', 'rb') as token:
-                creds = pickle.load(token)
-        # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    'gmailCredential.json', SCOPES)
-                creds = flow.run_local_server(port=0)
-            # Save the credentials for the next run
-            with open('tokenGmail.pickle', 'wb') as token:
-                pickle.dump(creds, token)
-
-        service = build('gmail', 'v1', credentials=creds)
-        return service '''
