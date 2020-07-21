@@ -165,9 +165,10 @@ class EventHandler(object):
     def sendEmail(self):
         #yagmail.register('jenny.han1989', 'teddybear1989')
         #keyring.set_password('yagmail', 'jenny.han1989@gmail.com', 'teddybear1989')
-        yag = yagmail.SMTP('jenny.han1989@gmail.com','teddybear1989')
-        contents = self.user_info
-        yag.send(to='yidingh@iastate.edu', subject='Appointment request', contents=contents)
+        import yagmail
+        yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
+        yag.send(to='yidingh@iastate.edu', subject='Appointment request', contents=self.user_info)
+
 
 
     '''def CreateMessage(self, sender, to, subject, message_text):

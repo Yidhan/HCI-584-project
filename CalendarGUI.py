@@ -84,10 +84,6 @@ class CalendarApp(QMainWindow):
         pass
 
 if __name__ == "__main__":
-    import yagmail
-    yag = yagmail.SMTP('drcalendarapp2020@gmail.com', 'qwerasdf!@')
-    yag.send(to='yidingh@iastate.edu', subject='Appointment request', contents="Hello")
-    exit(0)
 
     app = QApplication([])
     app.quitOnLastWindowClosed()
