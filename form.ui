@@ -106,6 +106,19 @@ All set!</string>
      <string>Plan your visit with Dr. Goodman</string>
     </property>
    </widget>
+   <widget class="QLabel" name="feedbackLabel">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>550</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

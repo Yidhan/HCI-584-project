@@ -16,7 +16,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from dateutil import tz
-from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit, QMessageBox
+from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit, QMessageBox, QLabel
 
 from apiclient import errors
 import base64
@@ -168,13 +168,16 @@ class EventHandler(object):
         import yagmail
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
         msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
-        msgBox = QMessageBox()
+
+        feedbackLabel= self.calUI.findChild(QLabel,'feedbackLabel')
         if msg == False:
-            msgBox.setText("Failed, please try again.")
-            msgBox.exec_()
+            feedbackLabel.setText("Failed!")
+            feedbackLabel.setStyleSheet('color: red')
         else:
-            msgBox.setText("Request was sent.")
-            msgBox.exec_()
+            feedbackLabel.setText("Success!")
+            feedbackLabel.setStyleSheet('color: green')
+
+
 
 
 
