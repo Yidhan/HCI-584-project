@@ -5,7 +5,7 @@
 # Purpose:    This class handles the GUI events, it handles user actions on GUI.
 # Author:     Yiding Han
 # Created:    6/12/2020
-# TODO:       Add function body
+# TODO:       test and debug
 # Note:       Handles GUI events and interacts with google calendar API directly
 # -----------------------------------------------------------------------------------------------------------------------
 from __future__ import print_function
@@ -65,7 +65,12 @@ class EventHandler(object):
 
     #when book button is clicked
     def bookPushButton_cliked(self):
-        self.calUI.showInfoDialog()
+        #unless the selected timeslot is 'Available', the dialog window won't open when hit Book
+        array = self.calUI.QListWidget.selectedItems()
+        s = array[0].text()
+        summary = s.split()[3]
+        if summary == 'Available':
+            self.calUI.showInfoDialog()
 
 
     #when book button is clicked
@@ -79,8 +84,6 @@ class EventHandler(object):
         #hide popup window
         self.calUI.infoDialog.hide()
         self.getUserInfo()
-        #message = self.CreateMessage(self.user_email, 'yidingh@iastate.edu', self.user_name, self.user_info)
-        #self.SendMessage(self.gmail_service_ID(),self.user_email,message)
         self.sendEmail()
 
     def cancelPushButton_clicked(self):
@@ -141,7 +144,11 @@ class EventHandler(object):
         self.calUI.QListWidget.addItem(title)
         for event in events:
             start = event['start'].get('dateTime')
-            s = start +' '+ event['summary']
+            end = event['end'].get('dateTime')
+            time_slot = start[11:-9] +' - '+end[11:-9]
+
+            s = time_slot +' '+ event['summary']
+
             #append all results to events_list and print it
             events_list.append(s)
             #print(s)
@@ -152,7 +159,9 @@ class EventHandler(object):
     def getUserInfo(self):
         select_widget = self.calUI.QListWidget
         array1= select_widget.selectedItems()
-        self.user_info += 'Selected time: ' + array1[0].text()
+        selected_date = self.calUI.calWidget.selectedDate()
+        date = str(selected_date.month()) +'/'+ str(selected_date.day()) +'/' +str(selected_date.year())
+        self.user_info += 'Selected time: ' + date + ' ' + array1[0].text()
         self.user_name = self.calUI.infoDialog.findChild(QPlainTextEdit, 'nameTextEdit').toPlainText()
         self.user_info = self.user_info + '\n' + 'Patient name: ' + self.user_name
         self.user_email = self.calUI.infoDialog.findChild(QPlainTextEdit, 'emailTextEdit').toPlainText()
@@ -169,6 +178,7 @@ class EventHandler(object):
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
         msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
 
+        #set feedbackLabel to Success or Failed to give user feedback after they hit send
         feedbackLabel= self.calUI.findChild(QLabel,'feedbackLabel')
         if msg == False:
             feedbackLabel.setText("Failed!")
