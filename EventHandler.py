@@ -155,7 +155,8 @@ class EventHandler(object):
             self.calUI.QListWidget.addItem(s)
         return events_list
 
-
+    #This function reads user's time date selection, and their input data from the infoWindow
+    #The member variables like self.users_info will be updated and will be used to send email for booking request
     def getUserInfo(self):
         select_widget = self.calUI.QListWidget
         array1= select_widget.selectedItems()
@@ -170,10 +171,8 @@ class EventHandler(object):
         self.user_info = self.user_info + '\n' + 'Reason for visit: ' + self.user_reason
         print(self.user_info)
 
-
+    #This function sends the user data as an email to admin email address
     def sendEmail(self):
-        #yagmail.register('jenny.han1989', 'teddybear1989')
-        #keyring.set_password('yagmail', 'jenny.han1989@gmail.com', 'teddybear1989')
         import yagmail
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
         msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
