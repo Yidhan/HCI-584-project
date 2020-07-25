@@ -14,3 +14,21 @@ Bugs 2,3,4 fixed by adding features to the popup window(made it frameless and st
 
 5. Gmail API won't work with credentials and tokens. May try another method to use GoogleCalendar API and use another email address to "insert events", thus creating an event and send an invite to admin for review.
 Will call this method2 and work in another branch. 
+
+
+Bug 5 fixed with yagmail
+
+6. If user book another appt, the former info will accumulate with the new, and sent together as email.
+example: 
+Selected time: 2020-07-23T13:00:00-07:00 Available
+Patient name: e3r
+Patient email: erewr
+Reason for visit: rerwSelected time: 2020-07-23T13:00:00-07:00 Available
+Patient name: e3r
+Patient email: erewr
+Reason for visit: rerw
+
+
+7. "Success" label from former booking won't disappear when click on another date to book another one
+
+Bug 6 & 7 fixed.
