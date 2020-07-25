@@ -53,8 +53,6 @@ class CalendarApp(QMainWindow):
 
     #Bindind the UI components to listener(eventhandler)
     def BindEventsHandler(self):
-        btn = self.window.findChild(QPushButton, 'refreshPushButton')
-        btn.clicked.connect(self.eventHandler.refreshPushButton_clicked)
 
         btn = self.window.findChild(QPushButton, 'bookPushButton')
         btn.clicked.connect(self.eventHandler.bookPushButton_cliked)

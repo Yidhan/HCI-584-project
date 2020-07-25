@@ -16,19 +16,11 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from dateutil import tz
-from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QCalendarWidget,QListWidget, QPlainTextEdit, QMessageBox, QLabel
+from PySide2.QtWidgets import QPlainTextEdit,QLabel
 
-from apiclient import errors
-import base64
-from email.mime.audio import MIMEAudio
-from email.mime.base import MIMEBase
-from email.mime.image import MIMEImage
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import mimetypes
 
 import yagmail
-import keyring
+
 
 class EventHandler(object):
 
@@ -73,11 +65,6 @@ class EventHandler(object):
             self.calUI.showInfoDialog()
 
 
-    #when book button is clicked
-    #need to fill in the body
-    def refreshPushButton_clicked(self):
-        print("Page is refreshed")
-
     def sendPushButton_clicked(self):
         #enable main window
         self.calUI.setEnabled(True)
@@ -85,6 +72,7 @@ class EventHandler(object):
         self.calUI.infoDialog.hide()
         self.getUserInfo()
         self.sendEmail()
+        self.user_info = ''
 
     def cancelPushButton_clicked(self):
         #hide popup window
@@ -98,6 +86,7 @@ class EventHandler(object):
     #then print out and return the events list(availablity)
     def clickOnDate(self):
         self.calUI.QListWidget.clear()
+        self.calUI.findChild(QLabel, 'feedbackLabel').clear()
         events_list = []
         selected_date = self.calUI.calWidget.selectedDate()
 
@@ -173,7 +162,6 @@ class EventHandler(object):
 
     #This function sends the user data as an email to admin email address
     def sendEmail(self):
-        import yagmail
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
         msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
 

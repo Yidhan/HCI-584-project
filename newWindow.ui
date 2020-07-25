@@ -22,6 +22,10 @@
      <height>32</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">
+font: 13pt &quot;American Typewriter&quot;;</string>
+   </property>
    <property name="text">
     <string>Send</string>
    </property>
@@ -35,6 +39,9 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
+   </property>
   </widget>
   <widget class="QPlainTextEdit" name="emailTextEdit">
    <property name="geometry">
@@ -44,6 +51,9 @@
      <width>171</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="reasonTextEdit">
@@ -55,6 +65,9 @@
      <height>71</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -64,6 +77,9 @@
      <width>271</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 14pt &quot;American Typewriter&quot;;</string>
    </property>
    <property name="text">
     <string>Please fill out your information</string>
@@ -78,6 +94,9 @@
      <height>16</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
+   </property>
    <property name="text">
     <string>Name</string>
    </property>
@@ -90,6 +109,9 @@
      <width>58</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
    </property>
    <property name="text">
     <string>Email</string>
@@ -104,6 +126,9 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
+   </property>
    <property name="text">
     <string>Reason</string>
    </property>
@@ -116,6 +141,9 @@
      <width>58</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;American Typewriter&quot;;</string>
    </property>
    <property name="text">
     <string>for visit</string>
@@ -130,10 +158,46 @@
      <height>32</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">selection-color: rgb(3, 3, 4);
+selection-background-color: rgb(237, 234, 239);
+font: 13pt &quot;American Typewriter&quot;;</string>
+   </property>
    <property name="text">
     <string>Cancel</string>
    </property>
   </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>-1</x>
+     <y>-1</y>
+     <width>331</width>
+     <height>341</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(239, 246, 255);
+</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+  </widget>
+  <zorder>frame</zorder>
+  <zorder>sendButton</zorder>
+  <zorder>nameTextEdit</zorder>
+  <zorder>emailTextEdit</zorder>
+  <zorder>reasonTextEdit</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>cancelButton</zorder>
  </widget>
  <resources/>
  <connections/>
