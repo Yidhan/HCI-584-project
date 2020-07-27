@@ -43,6 +43,7 @@ class CalendarApp(QMainWindow):
         super(CalendarApp, self).__init__()
         self.infoDialog = InfoWindow()
         self.load_ui()
+        self.eventHandler.clickOnDate()
 
     #call when bookPushbotton is clicked
     def showInfoDialog(self):

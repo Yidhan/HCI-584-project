@@ -17,8 +17,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from dateutil import tz
 from PySide2.QtWidgets import QPlainTextEdit,QLabel
-
-
 import yagmail
 
 
@@ -162,7 +160,7 @@ class EventHandler(object):
 
     #This function sends the user data as an email to admin email address
     def sendEmail(self):
-        yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="~/drgmail.json")
+        yag = yagmail.SMTP("drcalendarapp2020@gmail.com", oauth2_file="./drgmail.json")
         msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
 
         #set feedbackLabel to Success or Failed to give user feedback after they hit send
