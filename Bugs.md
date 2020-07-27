@@ -32,3 +32,9 @@ Reason for visit: rerw
 7. "Success" label from former booking won't disappear when click on another date to book another one
 
 Bug 6 & 7 fixed.
+
+8. Other ppl with the project file can't run it successfully(authorization problem)
+fixed?
+
+9. When the app runs, it automatically selects "today" on calendar(selected, highlighted), but the List widget has nothing to display(should have displayed today's events)
+fixed
