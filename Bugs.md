@@ -38,3 +38,6 @@ fixed?
 
 9. When the app runs, it automatically selects "today" on calendar(selected, highlighted), but the List widget has nothing to display(should have displayed today's events)
 fixed
+
+10. When the selection is "today", the events are sorted by the end time of the events, for example, if now is 2:30pm, the 2:00-3:00 event would still show up in the list, but it should not since the start time < current time. 
+fixed, added more filter when added to list widget.

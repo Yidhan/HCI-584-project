@@ -131,15 +131,24 @@ class EventHandler(object):
         self.calUI.QListWidget.addItem(title)
         for event in events:
             start = event['start'].get('dateTime')
+            start_hour = int(start[11:-12])
+            now_hour = int(now_time.hour)
+            start_date = int(start[8:10])
+            now_date = int(now_time.day)
+
             end = event['end'].get('dateTime')
             time_slot = start[11:-9] +' - '+end[11:-9]
-
             s = time_slot +' '+ event['summary']
 
+            if (start_date == now_date) & (start_hour == now_hour):
+                continue
             #append all results to events_list and print it
-            events_list.append(s)
+            else:
+                events_list.append(s)
+                self.calUI.QListWidget.addItem(s)
             #print(s)
-            self.calUI.QListWidget.addItem(s)
+
+
         return events_list
 
     #This function reads user's time date selection, and their input data from the infoWindow
