@@ -2,7 +2,7 @@
 and request booking. """
 
 # -----------------------------------------------------------------------------------------------------------------------
-# Name:       CalendarGUI.py
+# Name:       Run_CalendarGUI.py
 # Purpose:    This is the patient GUI where patients look up available time slots and request booking.
 # Author:     Yiding Han
 # Created:    6/17/2020
