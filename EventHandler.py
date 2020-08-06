@@ -100,14 +100,14 @@ class EventHandler(object):
         else:
             # Selected a previous date, print error message, reset list
             self.calUI.QListWidget.addItem("Invalid date, please try again!")
-            print("Invalid date, please try again!")
+            #print("Invalid date, please try again!")
             return events_list
         #no matter what, end_time is 23:59:59 of selected_date
         end_time = datetime.datetime(selected_date.year(), selected_date.month(), selected_date.day(), 23, 59, 59)
 
         #print out title for the results
         title = "Availabilities for "+ str(selected_date.month())+ "/"+ str(selected_date.day())+ "/"+ str(selected_date.year())
-        print(title)
+        #print(title)
 
         tzinfo = tz.gettz('America/Los_Angeles')
         start_time = start_time.astimezone(tzinfo)
@@ -125,7 +125,7 @@ class EventHandler(object):
         #check if events list is empty, print No availability found if is empty.
         if not events:
             self.calUI.QListWidget.addItem('No availability found.')
-            print('No availability found.')
+            #print('No availability found.')
             return
         #if events list is not empty, for every event in the list, get its'dateTime' and 'summary' in the dictionary list
         self.calUI.QListWidget.addItem(title)
@@ -165,7 +165,7 @@ class EventHandler(object):
         self.user_info = self.user_info + '\n' + 'Patient email: '+ self.user_email
         self.user_reason = self.calUI.infoDialog.findChild(QPlainTextEdit, 'reasonTextEdit').toPlainText()
         self.user_info = self.user_info + '\n' + 'Reason for visit: ' + self.user_reason
-        print(self.user_info)
+        #print(self.user_info)
 
     #This function sends the user data as an email to admin email address
     def sendEmail(self):

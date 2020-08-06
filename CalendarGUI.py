@@ -17,7 +17,6 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QMainWindow, QDialog, QPushButton, QCalendarWidget,QListWidget
 
 
-
 class InfoWindow(QDialog):
     def __init__(self):
         super(InfoWindow, self).__init__()
