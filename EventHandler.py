@@ -1,13 +1,5 @@
-"""This is the class that Handles all the GUI events(button pressed). It handles users actions on GUI. """
+'''This module Handles all the GUI events(button pressed). It handles users actions on GUI. '''
 
-# -----------------------------------------------------------------------------------------------------------------------
-# Name:       EventHandler.py
-# Purpose:    This class handles the GUI events, it handles user actions on GUI.
-# Author:     Yiding Han
-# Created:    6/12/2020
-# TODO:       test and debug
-# Note:       Handles GUI events and interacts with google calendar API directly
-# -----------------------------------------------------------------------------------------------------------------------
 from __future__ import print_function
 import datetime
 import pickle
@@ -21,7 +13,7 @@ import yagmail
 
 
 class EventHandler(object):
-
+    '''This class handles all user actions on the CalendarGUI'''
     def __init__(self, calUI):
         self.calUI = calUI
         self.user_info = ''
@@ -29,13 +21,13 @@ class EventHandler(object):
         self.user_email = ''
         self.user_selection = ''
 
+        # The file token.pickle stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first time.
         # If modifying these scopes, delete the file token.pickle.
         SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
         creds = None
-        # The file token.pickle stores the user's access and refresh tokens, and is
-        # created automatically when the authorization flow completes for the first
-        # time.
+
         if os.path.exists('tokenCal.pickle'):
             with open('tokenCal.pickle', 'rb') as token:
                 creds = pickle.load(token)
@@ -53,38 +45,77 @@ class EventHandler(object):
 
         self.service = build('calendar', 'v3', credentials=creds)
 
-    #when book button is clicked
+
     def bookPushButton_cliked(self):
-        #unless the selected timeslot is 'Available', the dialog window won't open when hit Book
+        '''This function is called when the book push button is clicked on GUI,
+        it will record which timeslot the user clicked on, and opens the pop-up window for user info
+
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
+
         array = self.calUI.QListWidget.selectedItems()
         s = array[0].text()
         summary = s.split()[3]
+        # Only when the selected timeslot is 'Available',
+        # the dialog window will open when hit 'Book'
         if summary == 'Available':
             self.calUI.showInfoDialog()
 
 
     def sendPushButton_clicked(self):
-        #enable main window
-        self.calUI.setEnabled(True)
-        #hide popup window
-        self.calUI.infoDialog.hide()
-        self.getUserInfo()
-        self.sendEmail()
-        self.user_info = ''
+        '''This function is called when the send pushbutton is clicked on GUI,
+        it will show the main window again to the user, and gather user info from the pop-up window,
+        send it as an email to the admin for a booking request
+
+        Args:
+            none
+
+        Returns:
+            none
+        '''
+
+        self.calUI.setEnabled(True) #re-enable main window when 'send' is hit
+        self.calUI.infoDialog.hide() #hide popup window when 'send' is hit
+        self.getUserInfo() #get user info from infoDialog(pop-up window user input)
+        self.sendEmail() #wrap the user info and send it as an email to admin email address
+        self.user_info = '' #clear user_info string after each 'send'
 
     def cancelPushButton_clicked(self):
-        #hide popup window
-        self.calUI.infoDialog.hide()
-        #enable main window
-        self.calUI.setEnabled(True)
+        '''This fucntion is called when user hit cancel push button on the pop-up window,
+        it will hide the pop-up window and re-show the main window
 
-    #This function is called when any date on the GUI calendar is clicked
-    #it will record the date that is selected,
-    #and pull calendar data from Google calendar account using Dr's calendarID and credentials,
-    #then print out and return the events list(availablity)
+        Args:
+            none
+
+        Returns:
+            none
+        '''
+
+        self.calUI.infoDialog.hide() #hide popup window
+        self.calUI.setEnabled(True) #enable main window
+
+
     def clickOnDate(self):
-        self.calUI.QListWidget.clear()
-        self.calUI.findChild(QLabel, 'feedbackLabel').clear()
+        '''This function is called when any date on the GUI calendar is clicked,
+        it will record the date that is selected,
+        and pull calendar data from Google calendar account using Dr's calendarID
+         and credentials,then add the data to QListWidget.
+
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
+
+        self.calUI.QListWidget.clear() #clear the QListWidget on GUI
+        self.calUI.findChild(QLabel, 'feedbackLabel').clear() #clear feedback label
         events_list = []
         selected_date = self.calUI.calWidget.selectedDate()
 
@@ -100,14 +131,10 @@ class EventHandler(object):
         else:
             # Selected a previous date, print error message, reset list
             self.calUI.QListWidget.addItem("Invalid date, please try again!")
-            #print("Invalid date, please try again!")
-            return events_list
         #no matter what, end_time is 23:59:59 of selected_date
         end_time = datetime.datetime(selected_date.year(), selected_date.month(), selected_date.day(), 23, 59, 59)
 
-        #print out title for the results
         title = "Availabilities for "+ str(selected_date.month())+ "/"+ str(selected_date.day())+ "/"+ str(selected_date.year())
-        #print(title)
 
         tzinfo = tz.gettz('America/Los_Angeles')
         start_time = start_time.astimezone(tzinfo)
@@ -125,7 +152,6 @@ class EventHandler(object):
         #check if events list is empty, print No availability found if is empty.
         if not events:
             self.calUI.QListWidget.addItem('No availability found.')
-            #print('No availability found.')
             return
         #if events list is not empty, for every event in the list, get its'dateTime' and 'summary' in the dictionary list
         self.calUI.QListWidget.addItem(title)
@@ -142,33 +168,46 @@ class EventHandler(object):
 
             if (start_date == now_date) & (start_hour == now_hour):
                 continue
-            #append all results to events_list and print it
+            #append all results to events_list and add to QListWidget
             else:
                 events_list.append(s)
-                self.calUI.QListWidget.addItem(s)
-            #print(s)
+                self.calUI.QListWidget.addItem(s) # add events to QListWidget
 
 
-        return events_list
-
-    #This function reads user's time date selection, and their input data from the infoWindow
-    #The member variables like self.users_info will be updated and will be used to send email for booking request
     def getUserInfo(self):
+        '''
+        This function reads user's time date selection, and their input data from the infoWindow
+        The variables like self.users_info,self.user_name, etc will be updated and will be used to send email for booking request
+
+        Args:
+            none
+
+        Returns:
+            none
+        '''
         select_widget = self.calUI.QListWidget
         array1= select_widget.selectedItems()
-        selected_date = self.calUI.calWidget.selectedDate()
-        date = str(selected_date.month()) +'/'+ str(selected_date.day()) +'/' +str(selected_date.year())
-        self.user_info += 'Selected time: ' + date + ' ' + array1[0].text()
+        selected_date = self.calUI.calWidget.selectedDate() #get selected Date
+        date = str(selected_date.month()) +'/'+ str(selected_date.day()) +'/' +str(selected_date.year()) #convert the selected date to a more readable format
+        self.user_info += 'Selected time: ' + date + ' ' + array1[0].text() #add selected time to user_info
         self.user_name = self.calUI.infoDialog.findChild(QPlainTextEdit, 'nameTextEdit').toPlainText()
-        self.user_info = self.user_info + '\n' + 'Patient name: ' + self.user_name
+        self.user_info = self.user_info + '\n' + 'Patient name: ' + self.user_name # add user name to user_info
         self.user_email = self.calUI.infoDialog.findChild(QPlainTextEdit, 'emailTextEdit').toPlainText()
-        self.user_info = self.user_info + '\n' + 'Patient email: '+ self.user_email
+        self.user_info = self.user_info + '\n' + 'Patient email: '+ self.user_email # add user email to user_info
         self.user_reason = self.calUI.infoDialog.findChild(QPlainTextEdit, 'reasonTextEdit').toPlainText()
-        self.user_info = self.user_info + '\n' + 'Reason for visit: ' + self.user_reason
-        #print(self.user_info)
+        self.user_info = self.user_info + '\n' + 'Reason for visit: ' + self.user_reason #add user reason to user_info
 
-    #This function sends the user data as an email to admin email address
+
     def sendEmail(self):
+        '''This function sends the user data as an email to admin email address
+
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", "jffscsedqfhauzmg")
         msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
 

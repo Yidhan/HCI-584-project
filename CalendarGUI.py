@@ -1,14 +1,5 @@
-"""This is the GUI class that when interact directly with user. User interactions include looking up available time
-and request booking. """
-
-# -----------------------------------------------------------------------------------------------------------------------
-# Name:       CalendarGUI.py
-# Purpose:    This is the patient GUI where patients look up available time slots and request booking.
-# Author:     Yiding Han
-# Created:    6/17/2020
-# TODO:       Add functions
-# Note:       Use PyQT to develop GUI later
-# ---------
+''' The module contains the GUI classes that interact directly with user.
+This is the patient GUI where patients look up available time slots and request booking.'''
 
 import os
 from EventHandler import EventHandler
@@ -18,11 +9,32 @@ from PySide2.QtWidgets import QMainWindow, QDialog, QPushButton, QCalendarWidget
 
 
 class InfoWindow(QDialog):
+    '''This class is the infoWindow class, which contains the pop-up window GUI,
+     it appears when the user click on Book button on MainWindow. It will ask the users to fill in their personal info for booking
+     This class inherited QDialog class'''
     def __init__(self):
+        '''This function calls the parents class and load newWidow.ui
+
+
+        Args:
+            none
+
+        Returns:
+            none
+        '''
         super(InfoWindow, self).__init__()
         self.load_ui()
 
     def load_ui(self):
+        '''Load the newWindow.ui file and show it on screen.
+
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
         loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "newWindow.ui")
         ui_file = QFile(path)
@@ -35,23 +47,48 @@ class InfoWindow(QDialog):
         self.setWindowFlags(self.windowFlags()^Qt.WindowStaysOnTopHint)
 
 class CalendarApp(QMainWindow):
+    '''This class contains the CalendarApp class(main window), it inherits the QMainWindow class in Pyside2'''
     def __init__(self):
+        ''' This function calls parents class, initialize infoWindow, load main window UI,
+        and call the clickOnDate function in eventHandler to get today's event list upon opening the GUI
+
+        Args:
+            none
+
+        Returns:
+            none
+        '''
         self.eventHandler = EventHandler(self)
         super(CalendarApp, self).__init__()
         self.infoDialog = InfoWindow()
         self.load_ui()
         self.eventHandler.clickOnDate()
 
-    #call when bookPushbotton is clicked
     def showInfoDialog(self):
-        #set main window to disable when showing the popup window
-        self.setEnabled(False)
-        # show popup info window
-        self.infoDialog.show()
+        '''Shows the pop-up infoWindow when the called (upon bookPushbutton is clicked)
+
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
+        self.setEnabled(False) #set main window to disable when showing the popup window
+        self.infoDialog.show() # show popup info window
+
 
     #Bindind the UI components to listener(eventhandler)
     def BindEventsHandler(self):
+        '''Binds the UI components to its listener - functions in EventHandler class
 
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
         btn = self.window.findChild(QPushButton, 'bookPushButton')
         btn.clicked.connect(self.eventHandler.bookPushButton_cliked)
 
@@ -67,6 +104,15 @@ class CalendarApp(QMainWindow):
 
 
     def load_ui(self):
+        '''Load the mainWindow.ui file and show it on screen.
+
+        Args:
+            none
+
+        Returns:
+            none
+
+        '''
         loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "mainWindow.ui")
         ui_file = QFile(path)
@@ -76,14 +122,4 @@ class CalendarApp(QMainWindow):
         self.BindEventsHandler()
         self.window.show()
 
-    def closeEvent(self, event):
-        pass
 
-'''if __name__ == "__main__":
-
-    app = QApplication([])
-    app.quitOnLastWindowClosed()
-#    app.setQuitOnLastWindowClosed()
-    mainWindow = CalendarApp()
-    sys.exit(app.exec_())
-'''
