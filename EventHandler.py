@@ -209,7 +209,8 @@ class EventHandler(object):
 
         '''
         yag = yagmail.SMTP("drcalendarapp2020@gmail.com", "jffscsedqfhauzmg")
-        msg = yag.send(to='yidingh@iastate.edu', subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
+        admin_email = 'yidingh@iastate.edu'
+        msg = yag.send(to=admin_email, subject='Appointment Request from: '+ self.user_name, contents=self.user_info)
 
         #set feedbackLabel to Success or Failed to give user feedback after they hit send
         feedbackLabel= self.calUI.findChild(QLabel,'feedbackLabel')
